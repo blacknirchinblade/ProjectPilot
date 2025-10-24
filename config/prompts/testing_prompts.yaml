@@ -1,0 +1,171 @@
+# Testing Agent Prompts
+
+generate_project_tests: |
+  You are an expert Test Engineer. Your task is to generate comprehensive and project-aware unit tests for the file located at `{file_path}`.
+
+  **File to Test:** `{file_path}`
+  **Module Path:** `{file_path_module}`
+  **Purpose of the File:** {file_purpose}
+
+  **Full Project Architecture (for context):**
+  ```json
+  {architecture}
+  ```
+
+  **Code to Test:**
+  ```python
+  {code}
+  ```
+
+  **Instructions:**
+  1.  **Framework:** Use the `pytest` framework for all tests.
+  2.  **Imports:**
+      -   Correctly import the necessary components from `{file_path_module}`.
+      -   Import any other required libraries (`pytest`, `unittest.mock`, etc.).
+  3.  **Test Coverage:** Create tests that cover:
+      -   **Happy Path:** Normal, expected inputs and outcomes.
+      -   **Edge Cases:** Empty inputs, `None` values, zero values, boundaries.
+      -   **Error Conditions:** Invalid inputs that should raise exceptions (`pytest.raises`).
+      -   **Mocking:** Use `unittest.mock.patch` or `mocker` to mock external dependencies (like API calls, database connections, or other modules) to ensure the test is isolated.
+  4.  **Best Practices:**
+      -   Use fixtures (`@pytest.fixture`) for reusable setup (e.g., creating class instances, sample data).
+      -   Use `pytest.mark.parametrize` to test multiple scenarios with the same test function.
+      -   Write clean, readable test code with descriptive function names (e.g., `test_my_function_succeeds_on_valid_input`).
+  5.  **Output:** Provide ONLY the complete, runnable Python code for the test file. Do not include any explanatory text, markdown formatting, or comments outside of the code.
+
+  **Example Test Structure:**
+  ```python
+  import pytest
+  from unittest.mock import patch
+  from {file_path_module} import MyClass, my_function
+
+  @pytest.fixture
+  def sample_fixture():
+      return "some_setup_data"
+
+  def test_my_function_succeeds_on_valid_input(sample_fixture):
+      # GIVEN valid inputs
+      # WHEN the function is called
+      # THEN assert the outcome is correct
+      pass
+
+  def test_my_class_raises_error_on_invalid_data():
+      with pytest.raises(ValueError):
+          # GIVEN invalid data
+          # WHEN the class is instantiated or a method is called
+          # THEN assert a ValueError is raised
+          pass
+  ```
+  
+generate_unit_tests: |
+  You are an expert Test Engineer. Generate comprehensive unit tests for:
+  
+  Code:
+  ```python
+  {code}
+  ```
+  
+  Create pytest tests that cover:
+  1. Normal/Happy path cases
+  2. Edge cases (empty input, None, boundaries)
+  3. Error conditions (invalid input, exceptions)
+  4. Boundary conditions
+  5. Type validation
+  
+  Requirements:
+  - Use pytest framework
+  - Correctly import the necessary components Include File Imports and Module Imports
+  - Include fixtures (@pytest.fixture) for any necessary setup (e.g., mock objects, sample data).
+  - Use parametrize for multiple test cases
+  - test all public methods and functions
+  - write clean, readable test code
+  - Clear test function names (test_<function>_<scenario>)
+  - Descriptive assertion messages
+  - Aim for >80% code coverage
+  - End the entire response with the marker: # CODE_GENERATION_COMPLETE
+  
+  Provide complete test file.
+
+generate_integration_tests: |
+  Generate integration tests for:
+  
+  Components: {components}
+  Integration Points: {integration_points}
+  
+  Test:
+  1. Component interactions
+  2. Data flow between components
+  3. End-to-end workflows
+  4. Error propagation
+  5. File I/O operations
+  
+  Use pytest and appropriate fixtures.
+  Include setup and teardown for test data.
+
+generate_ml_tests: |
+  Generate tests for ML pipeline:
+  
+  Pipeline Components:
+  {pipeline_components}
+  
+  Create tests for:
+  1. Data Loading and Validation
+     - Test with valid data
+     - Test with corrupt data
+     - Test data shape/types
+  
+  2. Preprocessing
+     - Test transformations
+     - Test normalization
+     - Test augmentation
+  
+  3. Model Architecture
+     - Test model creation
+     - Test forward pass
+     - Test output shapes
+  
+  4. Training (Smoke Test)
+     - Test one training step
+     - Test loss computation
+     - Test gradient flow
+  
+  5. Inference
+     - Test with sample input
+     - Test batch inference
+     - Test edge cases
+  
+  6. Metrics
+     - Test metric calculations
+     - Test with known values
+  
+  Use pytest and create fixtures for dummy data.
+
+generate_test_fixtures: |
+  Create pytest fixtures for:
+  
+  Test Requirements: {requirements}
+  Data Needs: {data_needs}
+  
+  Generate:
+  - Fixture for sample data
+  - Fixture for mock objects
+  - Fixture for temporary files/directories
+  - Fixture for configuration
+  - Setup/teardown fixtures
+  
+  Make fixtures reusable across tests.
+
+test_coverage_analysis: |
+  Analyze test coverage for:
+  
+  Source Files: {source_files}
+  Test Files: {test_files}
+  
+  Identify:
+  1. Functions/methods without tests
+  2. Uncovered branches
+  3. Edge cases not tested
+  4. Error conditions not tested
+  
+  Suggest additional tests needed to achieve >80% coverage.
+

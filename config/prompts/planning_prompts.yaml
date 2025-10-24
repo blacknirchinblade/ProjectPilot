@@ -1,0 +1,198 @@
+# Planning Agent Prompts
+
+# NEW: Dynamic Architecture Design (Week 3)
+dynamic_architecture_design: |
+  Design an optimal project architecture based on this comprehensive specification:
+  
+  Specification: {specification}
+  
+  Your task is to decide:
+  1. How many Python files are needed? (Be realistic: 3-15 files typically)
+  2. What should each file contain? (classes, functions, purpose)
+  3. How should code be organized? (modular vs monolithic)
+  4. What config files are needed?
+  
+  Return your design as JSON (NO markdown, just raw JSON):
+  {{
+    "structure_type": "modular|monolithic|microservices",
+    "justification": "Why this structure is optimal for this project",
+    "files": [
+      {{
+        "path": "src/module_name/file_name.py",
+        "purpose": "Clear description of what this file does",
+        "estimated_lines": 150,
+        "complexity": "simple|moderate|complex",
+        "classes": [
+          {{
+            "name": "ClassName",
+            "purpose": "What this class does",
+            "methods": ["method1", "method2"],
+            "estimated_lines": 80
+          }}
+        ],
+        "functions": [
+          {{
+            "name": "function_name",
+            "purpose": "What this function does",
+            "estimated_lines": 20
+          }}
+        ],
+        "dependencies": ["torch", "numpy", "custom_module"]
+      }}
+    ],
+    "config_files": [
+      {{
+        "path": "config/hyperparameters.yaml",
+        "purpose": "Training hyperparameters",
+        "sample_content": "learning_rate: 0.001\\nepochs: 20"
+      }}
+    ],
+    "documentation_files": [
+      {{
+        "path": "README.md",
+        "sections": ["Installation", "Usage", "Examples"]
+      }}
+    ],
+    "total_estimated_files": 8,
+    "total_estimated_lines": 1500,
+    "estimated_complexity": "moderate",
+    "scalability_notes": "How this scales to larger datasets/models",
+    "maintainability_score": 8.5
+  }}
+  
+  Design principles to follow:
+  - **Modularity**: Separate concerns (data, model, training, evaluation)
+  - **Reusability**: Create components that can be reused
+  - **Testability**: Design for easy unit testing
+  - **Simplicity**: Don't over-engineer, keep it practical
+  - **Industry Standards**: Follow ML/Python best practices
+  
+  Consider project complexity:
+  - Simple project (digit classifier): 4-6 files
+  - Moderate project (object detection): 8-12 files
+  - Complex project (multimodal system): 12-20 files
+  
+  Return ONLY valid JSON, no explanatory text before or after.
+
+optimize_module_structure: |
+  Analyze this architecture and suggest optimizations:
+  
+  Current Architecture: {architecture}
+  
+  Look for:
+  1. **Code Duplication**: Can any code be consolidated?
+  2. **Over-engineering**: Are there too many files/layers?
+  3. **Under-engineering**: Are files too large or doing too much?
+  4. **Poor Separation**: Are concerns properly separated?
+  5. **Missing Components**: What's missing for production?
+  6. **Dependency Issues**: Any circular dependencies or tight coupling?
+  
+  Return optimized architecture as JSON (NO markdown):
+  {{
+    "optimized_architecture": {{
+      ... same structure as input but improved ...
+    }},
+    "improvements": [
+      {{
+        "type": "consolidation|split|refactor|addition|removal",
+        "description": "What was changed and why",
+        "files_affected": ["file1.py", "file2.py"],
+        "benefit": "Improved maintainability/performance/clarity"
+      }}
+    ],
+    "metrics": {{
+      "before": {{
+        "files": 10,
+        "avg_lines_per_file": 200,
+        "complexity_score": 7.5
+      }},
+      "after": {{
+        "files": 8,
+        "avg_lines_per_file": 150,
+        "complexity_score": 8.5
+      }}
+    }},
+    "recommendations": [
+      "Additional suggestions for future improvements"
+    ]
+  }}
+  
+  Return ONLY valid JSON.
+
+requirement_analysis: |
+  Analyze the following project requirement and break it down into detailed specifications:
+  
+  Project Description:
+  {project_description}
+  
+  Please provide:
+  1. Project Type (ML/DL/NLP/CV/Gen AI)
+  2. Key Features Required
+  3. Technical Components Needed
+  4. Data Requirements
+  5. Model/Algorithm Requirements
+  6. Deployment Considerations
+  7. Testing Strategy
+  
+  Ask clarifying questions if anything is ambiguous.
+
+clarification_questions: |
+  The user wants to build: {project_description}
+  
+  Generate 5-10 clarifying questions to better understand the requirements. Focus on:
+  - Specific use case and goals
+  - Data availability and format
+  - Performance requirements
+  - Deployment environment
+  - Scale and constraints
+  - Success metrics
+  
+  Format as numbered questions.
+
+architecture_design: |
+  Design a complete architecture for the following project:
+  
+  Project Type: {project_type}
+  Requirements: {requirements}
+  
+  Provide:
+  1. High-level architecture diagram (describe it in text)
+  2. Component breakdown with responsibilities
+  3. Data flow description
+  4. Technology stack recommendation
+  5. File/folder structure
+  6. Key interfaces between components
+  7. External dependencies
+  
+  Focus on scalability, maintainability, and best practices.
+
+task_breakdown: |
+  Break down this project into specific, actionable tasks:
+  
+  Project: {project_name}
+  Architecture: {architecture}
+  
+  For each task provide:
+  - Task ID and name
+  - Description
+  - Dependencies (which tasks must be completed first)
+  - Estimated complexity (Low/Medium/High)
+  - Files to create/modify
+  - Success criteria
+  
+  Order tasks logically based on dependencies.
+
+dependency_analysis: |
+  Analyze the dependencies between these components:
+  
+  Components:
+  {components}
+  
+  Identify:
+  1. Direct dependencies (A needs B)
+  2. Circular dependencies (problems to fix)
+  3. Shared dependencies
+  4. External library dependencies
+  5. Data dependencies
+  
+  Suggest the optimal order for implementation.

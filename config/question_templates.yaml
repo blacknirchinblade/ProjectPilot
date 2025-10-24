@@ -1,0 +1,647 @@
+# Question Templates for Clarification Agent
+# Comprehensive library of pre-defined questions organized by category
+
+# ==============================================================================
+# FRAMEWORK QUESTIONS
+# ==============================================================================
+
+framework_selection:
+  id: "Q_FRAMEWORK_001"
+  category: "framework"
+  priority: "BLOCKING"
+  required: true
+  text: "Which machine learning framework would you like to use?"
+  options:
+    - "PyTorch (recommended for research, flexibility, and dynamic computation)"
+    - "TensorFlow (recommended for production deployment and serving)"
+    - "JAX (recommended for high-performance computing and research)"
+    - "Scikit-learn (recommended for classical ML algorithms)"
+    - "Keras (high-level API, can use TensorFlow/JAX backend)"
+    - "Other (please specify in follow-up)"
+  default: "PyTorch"
+  context_key: "framework"
+  validation_rule: "^(pytorch|tensorflow|jax|sklearn|keras|other)$"
+  help_text: "Choose based on your use case: PyTorch for flexibility, TensorFlow for production, JAX for performance"
+  follow_up_questions:
+    pytorch: ["pytorch_version"]
+    tensorflow: ["tensorflow_version"]
+    jax: ["jax_version"]
+
+pytorch_version:
+  id: "Q_FRAMEWORK_002"
+  category: "framework"
+  priority: "MEDIUM"
+  required: false
+  text: "Which PyTorch version should be used?"
+  options:
+    - "Latest stable (2.1+)"
+    - "2.0.x (with torch.compile support)"
+    - "1.13.x (Long-term support)"
+    - "Let AutoCoder decide"
+  default: "Latest stable (2.1+)"
+  context_key: "framework_version"
+  validation_rule: "^[0-9]+\\.[0-9]+(\\.[0-9]+)?$"
+
+tensorflow_version:
+  id: "Q_FRAMEWORK_003"
+  category: "framework"
+  priority: "MEDIUM"
+  required: false
+  text: "Which TensorFlow version should be used?"
+  options:
+    - "Latest stable (2.14+)"
+    - "2.13.x (with Keras 3 support)"
+    - "2.x (any stable 2.x version)"
+    - "Let AutoCoder decide"
+  default: "Latest stable (2.14+)"
+  context_key: "framework_version"
+
+# ==============================================================================
+# HARDWARE QUESTIONS
+# ==============================================================================
+
+gpu_support:
+  id: "Q_HARDWARE_001"
+  category: "hardware"
+  priority: "HIGH"
+  required: false
+  text: "Do you need GPU/CUDA support for training?"
+  options:
+    - "Yes - I have NVIDIA GPU available"
+    - "Yes - Will use cloud GPU (AWS/GCP/Azure)"
+    - "No - CPU only training"
+    - "Optional - Support both CPU and GPU"
+  default: "Optional - Support both CPU and GPU"
+  context_key: "gpu_support"
+  help_text: "GPU significantly speeds up deep learning training (10-100x faster)"
+  follow_up_questions:
+    yes_nvidia: ["cuda_version", "gpu_memory"]
+    yes_cloud: ["cloud_provider", "gpu_type"]
+
+cuda_version:
+  id: "Q_HARDWARE_002"
+  category: "hardware"
+  priority: "MEDIUM"
+  required: false
+  text: "Which CUDA version is installed on your system?"
+  options:
+    - "CUDA 12.x (latest)"
+    - "CUDA 11.8"
+    - "CUDA 11.7"
+    - "Not sure - detect automatically"
+  default: "Not sure - detect automatically"
+  context_key: "cuda_version"
+  validation_rule: "^(11|12)\\.[0-9]+$"
+
+gpu_memory:
+  id: "Q_HARDWARE_003"
+  category: "hardware"
+  priority: "MEDIUM"
+  required: false
+  text: "How much GPU memory is available?"
+  options:
+    - "24GB+ (RTX 4090, A100, etc.)"
+    - "12-16GB (RTX 3090, V100, etc.)"
+    - "8-11GB (RTX 3080, RTX 4070, etc.)"
+    - "4-8GB (RTX 3060, GTX 1080, etc.)"
+    - "Less than 4GB"
+    - "Not sure"
+  default: "Not sure"
+  context_key: "gpu_memory_gb"
+  help_text: "This affects batch size and model architecture choices"
+
+batch_size:
+  id: "Q_HARDWARE_004"
+  category: "hardware"
+  priority: "LOW"
+  required: false
+  text: "What batch size should be used for training?"
+  options:
+    - "Auto-detect based on GPU memory"
+    - "Large (128+) for faster training"
+    - "Medium (32-64) balanced"
+    - "Small (8-16) for limited memory"
+    - "Let me specify: [enter number]"
+  default: "Auto-detect based on GPU memory"
+  context_key: "batch_size"
+  validation_rule: "^(auto|[1-9][0-9]*)$"
+
+mixed_precision:
+  id: "Q_HARDWARE_005"
+  category: "hardware"
+  priority: "MEDIUM"
+  required: false
+  text: "Should mixed precision training (FP16/BF16) be enabled?"
+  options:
+    - "Yes - FP16 for NVIDIA GPUs (faster, less memory)"
+    - "Yes - BF16 for newer GPUs (better numerical stability)"
+    - "No - Use FP32 (full precision)"
+    - "Auto-detect based on GPU capabilities"
+  default: "Auto-detect based on GPU capabilities"
+  context_key: "mixed_precision"
+  help_text: "Mixed precision can speed up training 2-3x and reduce memory usage by ~50%"
+
+# ==============================================================================
+# DATA QUESTIONS
+# ==============================================================================
+
+data_source:
+  id: "Q_DATA_001"
+  category: "data"
+  priority: "BLOCKING"
+  required: true
+  text: "What is the data source for this project?"
+  options:
+    - "Built-in dataset (CIFAR-10, ImageNet, MNIST, etc.)"
+    - "Custom local files (CSV, images, etc.)"
+    - "Download from URL"
+    - "Kaggle dataset"
+    - "Hugging Face datasets"
+    - "Database (SQL, MongoDB, etc.)"
+    - "API endpoint"
+  default: "Built-in dataset"
+  context_key: "data_source"
+  follow_up_questions:
+    builtin: ["builtin_dataset_name"]
+    custom: ["data_format", "data_location"]
+    kaggle: ["kaggle_dataset_name"]
+    huggingface: ["hf_dataset_name"]
+
+data_augmentation:
+  id: "Q_DATA_002"
+  category: "data"
+  priority: "HIGH"
+  required: false
+  text: "What level of data augmentation should be applied?"
+  options:
+    - "Aggressive - Heavy augmentation (rotations, flips, color jitter, cutout, mixup)"
+    - "Standard - Common augmentations (flips, crops, normalize)"
+    - "Conservative - Minimal augmentation (normalize only)"
+    - "None - No augmentation"
+    - "Auto - Let AutoCoder decide based on dataset size"
+  default: "Standard"
+  context_key: "data_augmentation"
+  help_text: "More augmentation helps prevent overfitting on small datasets"
+
+data_validation:
+  id: "Q_DATA_003"
+  category: "data"
+  priority: "MEDIUM"
+  required: false
+  text: "Should data validation and quality checks be included?"
+  options:
+    - "Yes - Comprehensive (check for nulls, outliers, distribution, corrupted files)"
+    - "Yes - Basic (check for nulls and data types)"
+    - "No - Assume data is clean"
+  default: "Yes - Basic"
+  context_key: "data_validation"
+
+train_val_split:
+  id: "Q_DATA_004"
+  category: "data"
+  priority: "MEDIUM"
+  required: false
+  text: "What should be the train/validation split ratio?"
+  options:
+    - "80/20 (standard)"
+    - "90/10 (for large datasets)"
+    - "70/30 (for small datasets)"
+    - "Use pre-defined splits (if available)"
+    - "Let me specify: [train%/val%]"
+  default: "80/20 (standard)"
+  context_key: "train_val_split"
+  validation_rule: "^([0-9]{1,2})/([0-9]{1,2})$"
+
+data_preprocessing:
+  id: "Q_DATA_005"
+  category: "data"
+  priority: "MEDIUM"
+  required: false
+  text: "What preprocessing steps should be applied?"
+  options:
+    - "Auto - Standard for this data type (normalize, resize, etc.)"
+    - "Normalization only (mean=0, std=1)"
+    - "Resize + Normalization"
+    - "Custom pipeline (will specify later)"
+    - "None - Raw data"
+  default: "Auto"
+  context_key: "data_preprocessing"
+
+# ==============================================================================
+# ARCHITECTURE QUESTIONS
+# ==============================================================================
+
+architecture_type:
+  id: "Q_ARCH_001"
+  category: "architecture"
+  priority: "BLOCKING"
+  required: true
+  text: "What type of model architecture do you prefer?"
+  options:
+    - "Custom - Build from scratch (full control)"
+    - "Pretrained - Transfer learning (faster, better accuracy)"
+    - "Ensemble - Combine multiple models (best accuracy)"
+    - "AutoML - Let system design architecture"
+    - "Hybrid - Pretrained backbone with custom head"
+  default: "Custom"
+  context_key: "architecture_type"
+  follow_up_questions:
+    pretrained: ["pretrained_model", "fine_tune_layers"]
+    ensemble: ["ensemble_models", "ensemble_method"]
+    automl: ["automl_budget"]
+
+pretrained_model:
+  id: "Q_ARCH_002"
+  category: "architecture"
+  priority: "HIGH"
+  required: false
+  text: "Which pretrained model should be used?"
+  options:
+    # Vision models
+    - "ResNet-50 (balanced accuracy/speed)"
+    - "ResNet-101 (higher accuracy)"
+    - "EfficientNet-B0 (efficient, mobile-friendly)"
+    - "EfficientNet-B4 (higher accuracy)"
+    - "Vision Transformer (ViT-B/16)"
+    - "MobileNet-V3 (lightweight, fast)"
+    - "DenseNet-121 (dense connections)"
+    # NLP models (if applicable)
+    - "BERT-base"
+    - "DistilBERT (smaller, faster)"
+    - "RoBERTa"
+    - "GPT-2"
+    - "T5"
+    - "Other (specify)"
+  default: "ResNet-50"
+  context_key: "pretrained_model"
+  help_text: "Pretrained models are trained on large datasets (ImageNet, etc.)"
+
+fine_tune_layers:
+  id: "Q_ARCH_003"
+  category: "architecture"
+  priority: "MEDIUM"
+  required: false
+  text: "How many layers should be fine-tuned?"
+  options:
+    - "All layers (full fine-tuning)"
+    - "Last N layers only (faster, less overfitting)"
+    - "Only classifier head (fastest, feature extraction)"
+    - "Gradual unfreezing (progressive training)"
+    - "Auto - Decide based on dataset size"
+  default: "Auto"
+  context_key: "fine_tune_strategy"
+
+model_size:
+  id: "Q_ARCH_004"
+  category: "architecture"
+  priority: "MEDIUM"
+  required: false
+  text: "What model size/complexity is acceptable?"
+  options:
+    - "Small (<5M parameters) - Fast, mobile-friendly"
+    - "Medium (5-50M parameters) - Balanced"
+    - "Large (50-500M parameters) - High accuracy"
+    - "Extra Large (500M+ parameters) - Best accuracy"
+    - "No preference - Optimize for accuracy"
+  default: "Medium"
+  context_key: "model_size"
+  help_text: "Larger models need more memory and training time"
+
+num_classes:
+  id: "Q_ARCH_005"
+  category: "architecture"
+  priority: "HIGH"
+  required: false
+  text: "How many output classes/categories?"
+  options:
+    - "Auto-detect from data"
+    - "Binary classification (2 classes)"
+    - "Multi-class (specify number)"
+    - "Multi-label (multiple labels per sample)"
+  default: "Auto-detect from data"
+  context_key: "num_classes"
+  validation_rule: "^(auto|binary|[1-9][0-9]*)$"
+
+# ==============================================================================
+# DEPLOYMENT QUESTIONS
+# ==============================================================================
+
+deployment_target:
+  id: "Q_DEPLOY_001"
+  category: "deployment"
+  priority: "HIGH"
+  required: false
+  text: "Where will this model be deployed?"
+  options:
+    - "Local - Development/testing only (no deployment)"
+    - "Cloud - AWS/GCP/Azure (scalable, production)"
+    - "Edge - Mobile/IoT devices (lightweight)"
+    - "Production API - REST/gRPC server"
+    - "Batch Processing - Offline inference"
+    - "Not decided yet"
+  default: "Local"
+  context_key: "deployment_target"
+  follow_up_questions:
+    cloud: ["cloud_provider", "containerize"]
+    edge: ["edge_platform", "model_optimization"]
+    api: ["api_type", "containerize"]
+
+cloud_provider:
+  id: "Q_DEPLOY_002"
+  category: "deployment"
+  priority: "MEDIUM"
+  required: false
+  text: "Which cloud provider will you use?"
+  options:
+    - "AWS (SageMaker, EC2, Lambda)"
+    - "Google Cloud (Vertex AI, Cloud Run)"
+    - "Azure (Azure ML, AKS)"
+    - "Multiple providers (cloud-agnostic)"
+    - "Not decided yet"
+  default: "AWS"
+  context_key: "cloud_provider"
+
+containerize:
+  id: "Q_DEPLOY_003"
+  category: "deployment"
+  priority: "MEDIUM"
+  required: false
+  text: "Should the project include Docker containerization?"
+  options:
+    - "Yes - Production-ready Dockerfile"
+    - "Yes - Development Dockerfile only"
+    - "Yes - Multi-stage build (optimized)"
+    - "No - Not needed"
+  default: "Yes - Production-ready Dockerfile"
+  context_key: "containerize"
+
+api_type:
+  id: "Q_DEPLOY_004"
+  category: "deployment"
+  priority: "MEDIUM"
+  required: false
+  text: "What type of API should be created?"
+  options:
+    - "REST API - FastAPI (modern, fast)"
+    - "REST API - Flask (simple, lightweight)"
+    - "gRPC - High performance"
+    - "GraphQL - Flexible queries"
+    - "Not needed"
+  default: "REST API - FastAPI"
+  context_key: "api_type"
+
+model_serving:
+  id: "Q_DEPLOY_005"
+  category: "deployment"
+  priority: "MEDIUM"
+  required: false
+  text: "What model serving approach should be used?"
+  options:
+    - "TorchServe (PyTorch models)"
+    - "TensorFlow Serving (TensorFlow models)"
+    - "ONNX Runtime (framework-agnostic)"
+    - "Triton Inference Server (multi-framework)"
+    - "Custom serving (FastAPI/Flask)"
+    - "Not needed"
+  default: "Custom serving"
+  context_key: "model_serving"
+
+# ==============================================================================
+# TESTING QUESTIONS
+# ==============================================================================
+
+test_coverage_target:
+  id: "Q_TEST_001"
+  category: "testing"
+  priority: "HIGH"
+  required: false
+  text: "What test coverage level should be achieved?"
+  options:
+    - "Comprehensive (90%+ coverage) - Unit + Integration + E2E"
+    - "Standard (80%+ coverage) - Unit + Integration"
+    - "Basic (70%+ coverage) - Unit tests only"
+    - "Minimal (50%+ coverage) - Critical paths only"
+    - "None - No automated tests"
+  default: "Standard (80%+ coverage)"
+  context_key: "test_coverage_target"
+  validation_rule: "^(0\\.[5-9]|0\\.9[0-9]|1\\.0)$"
+
+test_framework:
+  id: "Q_TEST_002"
+  category: "testing"
+  priority: "MEDIUM"
+  required: false
+  text: "Which testing framework should be used?"
+  options:
+    - "pytest (recommended for Python)"
+    - "unittest (Python standard library)"
+    - "nose2 (extends unittest)"
+    - "Let AutoCoder decide"
+  default: "pytest"
+  context_key: "test_framework"
+
+integration_tests:
+  id: "Q_TEST_003"
+  category: "testing"
+  priority: "MEDIUM"
+  required: false
+  text: "Should integration tests be included?"
+  options:
+    - "Yes - Test data pipeline, training loop, inference"
+    - "Yes - Test inference pipeline only"
+    - "No - Unit tests only"
+  default: "Yes - Test data pipeline, training loop, inference"
+  context_key: "include_integration_tests"
+
+e2e_tests:
+  id: "Q_TEST_004"
+  category: "testing"
+  priority: "LOW"
+  required: false
+  text: "Should end-to-end tests be included?"
+  options:
+    - "Yes - Full workflow from data to predictions"
+    - "No - Too time-consuming"
+  default: "No"
+  context_key: "include_e2e_tests"
+
+ci_cd:
+  id: "Q_TEST_005"
+  category: "testing"
+  priority: "MEDIUM"
+  required: false
+  text: "Should CI/CD pipeline configuration be included?"
+  options:
+    - "Yes - GitHub Actions"
+    - "Yes - GitLab CI"
+    - "Yes - Jenkins"
+    - "Yes - CircleCI"
+    - "No - Not needed"
+  default: "Yes - GitHub Actions"
+  context_key: "ci_cd_platform"
+
+# ==============================================================================
+# DOCUMENTATION QUESTIONS
+# ==============================================================================
+
+documentation_level:
+  id: "Q_DOC_001"
+  category: "documentation"
+  priority: "MEDIUM"
+  required: false
+  text: "What level of documentation should be generated?"
+  options:
+    - "Comprehensive - README, API docs, tutorials, examples"
+    - "Standard - README with setup/usage instructions"
+    - "Basic - README with minimal setup"
+    - "Code comments only"
+    - "None"
+  default: "Standard"
+  context_key: "documentation_level"
+
+readme_sections:
+  id: "Q_DOC_002"
+  category: "documentation"
+  priority: "LOW"
+  required: false
+  text: "What sections should be in the README?"
+  options:
+    - "All - Installation, Usage, Training, Evaluation, API, Deployment"
+    - "Essential - Installation, Usage, Training"
+    - "Minimal - Installation and basic usage"
+  default: "Essential"
+  context_key: "readme_sections"
+
+include_examples:
+  id: "Q_DOC_003"
+  category: "documentation"
+  priority: "LOW"
+  required: false
+  text: "Should usage examples be included?"
+  options:
+    - "Yes - Comprehensive examples (notebooks + scripts)"
+    - "Yes - Basic examples (scripts only)"
+    - "No"
+  default: "Yes - Basic examples"
+  context_key: "include_examples"
+
+code_documentation:
+  id: "Q_DOC_004"
+  category: "documentation"
+  priority: "MEDIUM"
+  required: false
+  text: "What level of code documentation (docstrings)?"
+  options:
+    - "Google style (recommended)"
+    - "NumPy style"
+    - "Sphinx style"
+    - "Minimal (function signatures only)"
+  default: "Google style"
+  context_key: "docstring_style"
+
+# ==============================================================================
+# PROJECT STRUCTURE QUESTIONS
+# ==============================================================================
+
+project_structure:
+  id: "Q_PROJ_001"
+  category: "other"
+  priority: "MEDIUM"
+  required: false
+  text: "What project structure template should be used?"
+  options:
+    - "Research - Flexible, notebook-friendly"
+    - "Production - Modular, scalable, best practices"
+    - "Minimal - Simple, flat structure"
+    - "Auto - Decide based on deployment target"
+  default: "Production"
+  context_key: "project_structure"
+
+config_management:
+  id: "Q_PROJ_002"
+  category: "other"
+  priority: "LOW"
+  required: false
+  text: "How should configuration be managed?"
+  options:
+    - "YAML files (recommended)"
+    - "JSON files"
+    - "Python config files (config.py)"
+    - "Environment variables (.env)"
+    - "Hydra (advanced config management)"
+  default: "YAML files"
+  context_key: "config_format"
+
+logging_level:
+  id: "Q_PROJ_003"
+  category: "other"
+  priority: "LOW"
+  required: false
+  text: "What logging detail level should be used?"
+  options:
+    - "Verbose - DEBUG level (detailed logs)"
+    - "Standard - INFO level (important events)"
+    - "Minimal - WARNING level (warnings/errors only)"
+  default: "Standard"
+  context_key: "logging_level"
+
+experiment_tracking:
+  id: "Q_PROJ_004"
+  category: "other"
+  priority: "MEDIUM"
+  required: false
+  text: "Should experiment tracking be included?"
+  options:
+    - "Yes - Weights & Biases (wandb)"
+    - "Yes - MLflow"
+    - "Yes - TensorBoard"
+    - "Yes - Multiple (wandb + TensorBoard)"
+    - "No - Not needed"
+  default: "Yes - TensorBoard"
+  context_key: "experiment_tracking"
+
+# ==============================================================================
+# PERFORMANCE & OPTIMIZATION QUESTIONS
+# ==============================================================================
+
+optimization_goal:
+  id: "Q_PERF_001"
+  category: "other"
+  priority: "MEDIUM"
+  required: false
+  text: "What is the primary optimization goal?"
+  options:
+    - "Accuracy - Best possible model performance"
+    - "Speed - Fastest training time"
+    - "Efficiency - Best accuracy/speed tradeoff"
+    - "Model Size - Smallest model (for deployment)"
+    - "Balanced - Consider all factors"
+  default: "Balanced"
+  context_key: "optimization_goal"
+
+early_stopping:
+  id: "Q_PERF_002"
+  category: "other"
+  priority: "LOW"
+  required: false
+  text: "Should early stopping be enabled?"
+  options:
+    - "Yes - Stop when validation loss plateaus (saves time)"
+    - "No - Train for full epochs"
+  default: "Yes"
+  context_key: "early_stopping"
+
+learning_rate_scheduler:
+  id: "Q_PERF_003"
+  category: "other"
+  priority: "MEDIUM"
+  required: false
+  text: "What learning rate schedule should be used?"
+  options:
+    - "ReduceLROnPlateau - Reduce when loss plateaus (adaptive)"
+    - "CosineAnnealing - Smooth decay (popular)"
+    - "StepLR - Step-wise decay (simple)"
+    - "OneCycleLR - One cycle policy (fast convergence)"
+    - "None - Constant learning rate"
+  default: "ReduceLROnPlateau"
+  context_key: "lr_scheduler"

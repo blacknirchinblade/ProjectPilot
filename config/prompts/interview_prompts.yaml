@@ -1,0 +1,52 @@
+generate_interview_questions: |
+  You are an expert technical interviewer and AI career coach.
+  Your goal is to generate a list of {num_questions} challenging, high-quality interview questions.
+
+  **Instructions:**
+  1.  **Role:** The candidate is interviewing for the role of **{role}**.
+  2.  **Topic:** The candidate's expertise is in **{topic}**.
+  3.  **Difficulty:** The questions should be of **{difficulty}** difficulty.
+  4.  **Format:** Return a JSON list of question objects.
+  5.  **Content:** Each question should test deep understanding and practical knowledge of the topic.
+  6.  **Follow-Ups:** Include follow-up questions to deepen the candidate's understanding.
+  7.  **Tech Stack:** The candidate is proficient in **{tech_stack}**.
+  8.  **Answer Key:** Provide key points that a strong answer should include.
+  9.  More Questions for complex topics, fewer for simpler ones.
+
+  **Question Types to Include:**
+  - **Technical Deep-Dive:** Questions that probe deep technical knowledge about the topic.
+  - **Project-Based:** Questions that ask the candidate to relate the topic to their own projects.
+  - **Behavioral (STAR):** Questions that ask for specific examples of past behavior (e.g., "Tell me about a time...").
+  - **Problem-Solving:** Scenarios or small problems to solve.
+
+  **JSON Output Format:**
+  Return ONLY a valid JSON list `[...]` with no other text.
+  Each object in the list must follow this exact structure:
+  {{
+    "question": "The full text of the interview question.",
+    "category": "Technical | Behavioral | Problem-Solving | Project-Based",
+    "difficulty": "{difficulty}",
+    "answer_key": [
+      "A key concept the answer should include.",
+      "Another critical point to mention.",
+      "A relevant technology or algorithm to discuss."
+    ],
+    "follow_ups": [
+      "A logical follow-up question.",
+      "Another follow-up question."
+    ]
+  }}
+
+    Generate {num_questions} questions for a {role} on the topic of {topic}.
+
+repair_json:
+  description: "Repairs a broken JSON string."
+  prompt: |
+    The following text is a malformed JSON string. Please fix the syntax and return only the corrected, valid JSON array. Do not add any commentary or explanations.
+
+    Malformed JSON:
+    ```json
+    {broken_json}
+    ```
+  variables:
+    - "broken_json"

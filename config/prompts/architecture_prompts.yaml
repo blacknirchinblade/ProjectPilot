@@ -1,0 +1,91 @@
+design_project_architecture: |
+  You are an expert software architect. Design a clean, modular project structure based on the following enhanced specification.
+
+  **ENHANCED SPECIFICATION:**
+  {enhanced_spec}
+
+  **ENABLED COMPONENTS:**
+  {component_list}
+
+  **USER CLARIFICATIONS:**
+  {clarification_list}
+
+  **DESIGN CONSTRAINTS:**
+  - Max lines per file: {max_lines_per_file}
+  - Minimum files: {min_files}
+  - Prefer modular design: True
+  - ALL file paths must start with `src/`, `tests/`, `docs/`, `deployment/`, or be a root file (e.g., `requirements.txt`).
+  - ALL internal dependencies MUST start with `src.` (e.g., `src.utils.logging`).
+  - **DO NOT** generate tasks for documentation files like README.md or files in 'docs/' folder.The DocumentationAgent will handle this seperately.
+
+  **DESIGN PRINCIPLES:**
+  1.  **Small, Focused Files**: Each file has ONE clear purpose (100-250 lines).
+  2.  **Logical Grouping**: Related files in the same directory (e.g., `src/models/`, `src/api/routes/`).
+  3.  **Clear Interfaces**: `exports` must list the main classes/functions this file provides.
+  4.  **Dependency-Aware**: `dependencies` must list all *internal* modules (e.g., `src.models.backbone`) and *external* packages (e.g., `torch`, `fastapi`, `pandas`) this file needs.
+
+  **RESPONSE FORMAT:**
+  You MUST respond with ONLY a valid JSON object. Do NOT add any markdown, comments, or introductory text.
+
+  ```json
+  {{
+    "structure": {{
+      "src/data/": [
+        {{
+          "name": "dataset.py",
+          "purpose": "PyTorch dataset and dataloader for CIFAR-10.",
+          "estimated_lines": 120,
+          "dependencies": ["torch", "torchvision", "torchvision.transforms"],
+          "exports": ["get_data_loaders"],
+          "components": [
+            {{"name": "get_data_loaders", "type": "function", "description": "Returns train, val, and test dataloaders."}}
+          ],
+          "priority": 1
+        }}
+      ],
+      "src/models/": [
+        {{
+          "name": "cnn_model.py",
+          "purpose": "Defines the simple custom CNN architecture.",
+          "estimated_lines": 90,
+          "dependencies": ["torch", "torch.nn"],
+          "exports": ["SimpleCNN"],
+          "components": [{{"name": "SimpleCNN", "type": "class", "description": "A 3-layer CNN model."}}],
+          "priority": 1
+        }}
+      ],
+      "src/training/": [
+         {{
+          "name": "train.py",
+          "purpose": "Main training script. Orchestrates data loading, model training, and evaluation.",
+          "estimated_lines": 200,
+          "dependencies": ["torch", "src.data.dataset", "src.models.cnn_model", "src.core.config"],
+          "exports": ["train_model"],
+          "components": [{{"name": "train_model", "type": "function", "description": "Main training and validation loop."}}],
+          "priority": 2
+        }}
+      ],
+      "src/core/": [
+         {{
+          "name": "config.py",
+          "purpose": "Loads configuration (hyperparameters, paths) from a YAML file or env variables.",
+          "estimated_lines": 80,
+          "dependencies": ["pydantic"],
+          "exports": ["settings"],
+          "components": [{{"name": "Settings", "type": "class", "description": "Pydantic class for settings management."}}],
+          "priority": 1
+        }}
+      ],
+      "root": [
+        {{
+          "name": "requirements.txt",
+          "purpose": "Lists all external Python dependencies.",
+          "estimated_lines": 20,
+          "dependencies": [],
+          "exports": [],
+          "components": [],
+          "priority": 1
+        }}
+      ]
+    }}
+  }}

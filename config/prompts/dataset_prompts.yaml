@@ -1,0 +1,85 @@
+# Dataset Generation Agent Prompts
+
+generate_dummy_dataset: |
+  Generate a dummy dataset that mimics this real dataset:
+  
+  Dataset Description: {description}
+  Original Structure: {structure}
+  Data Type: {data_type}  # tabular, image, text, time_series
+  Sample Size Needed: {sample_size}
+  
+  Provide Python code to generate the dummy dataset with:
+  - Similar statistical properties
+  - Same data types and formats
+  - Realistic value ranges
+  - Appropriate correlations (if any)
+  - Proper directory structure (if files)
+  
+  The code should save the dummy dataset in the same format as the original.
+
+generate_tabular_dummy: |
+  Create a dummy tabular dataset with:
+  
+  Columns: {columns}  # List with name, type, range/categories
+  Number of Rows: {num_rows}
+  Relationships: {relationships}  # correlations between columns
+  
+  Generate Python code using pandas that:
+  - Creates realistic synthetic data
+  - Maintains statistical properties
+  - Preserves correlations
+  - Includes appropriate null values if specified
+  - Saves to CSV
+  
+  Use numpy for random generation with proper distributions.
+
+generate_image_dummy: |
+  Create dummy image dataset for:
+  
+  Task: {task}  # classification, detection, segmentation
+  Image Size: {image_size}
+  Number of Images: {num_images}
+  Classes: {classes}
+  
+  Generate Python code that:
+  - Creates synthetic images (shapes, patterns, noise)
+  - Saves in proper directory structure (train/val/test)
+  - Creates labels/annotations
+  - Uses PIL or OpenCV
+  - Mimics real image characteristics
+  
+  Images don't need to be perfect, just realistic enough for testing.
+
+generate_text_dummy: |
+  Create dummy text dataset for:
+  
+  Task: {task}  # classification, NER, translation, etc.
+  Text Characteristics: {characteristics}
+  Number of Samples: {num_samples}
+  Categories/Labels: {labels}
+  
+  Generate Python code that:
+  - Creates synthetic text samples
+  - Maintains appropriate length
+  - Includes proper labels
+  - Saves in proper format (CSV, JSON, or text files)
+  - Uses realistic vocabulary (can be simple)
+  
+  Text should be coherent enough for testing but doesn't need to be perfect.
+
+generate_timeseries_dummy: |
+  Create dummy time series data for:
+  
+  Features: {features}
+  Time Range: {time_range}
+  Frequency: {frequency}  # hourly, daily, etc.
+  Patterns: {patterns}  # trend, seasonality, noise
+  
+  Generate Python code that:
+  - Creates time series with specified patterns
+  - Uses pandas DatetimeIndex
+  - Adds realistic noise
+  - Maintains value ranges
+  - Saves to CSV with proper datetime column
+  
+  Use numpy/pandas for generation.

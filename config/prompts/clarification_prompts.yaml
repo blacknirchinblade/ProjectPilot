@@ -1,0 +1,252 @@
+# Clarification Agent Prompts
+# LLM prompts for requirement analysis and answer parsing
+
+# NEW: Smart Question Generation (Week 3)
+generate_smart_questions: |
+  Generate smart, context-aware clarifying questions based on this specification and ambiguities:
+  
+  Specification: {specification}
+  Detected Ambiguities: {ambiguities}
+  
+  Your task: Generate DYNAMIC NUMBER of intelligent questions (3-12 questions):
+  - Simple projects (basic CRUD, simple classifier): 3-5 questions
+  - Medium projects (RAG system, API with ML): 5-8 questions
+  - Complex projects (multi-model, distributed, production-ready): 8-12 questions
+  
+  Each question must:
+  1. Resolve critical ambiguities blocking implementation
+  2. Be SPECIFIC (not "What model?" but "CNN or Transformer for image classification?")
+  3. Provide 5-8 CLEAR OPTIONS (comprehensive coverage)
+  4. ALWAYS include "Custom (I'll specify)" as last option
+  5. Consider USER CONTEXT (their likely skill level, use case)
+  6. Have ACTIONABLE answers (not philosophical)
+  
+  For each question, consider:
+  - Can this be auto-decided? (If yes, don't ask - just decide and document)
+  - Is this critical for code generation? (If no, skip it)
+  - Does the answer significantly change implementation? (If no, use sensible default)
+  
+  Return as JSON array (NO markdown, just raw JSON):
+  [
+    {{
+      "id": "Q-001",
+      "question": "Specific question with context and impact?",
+      "category": "data|model|training|evaluation|deployment|optimization|api|infrastructure",
+      "priority": "critical|high|medium|low",
+      "options": [
+        "Option 1 (recommended - brief reason)",
+        "Option 2 (alternative - trade-off)",
+        "Option 3 (advanced - when to use)",
+        "Option 4 (simple - for quick start)",
+        "Option 5 (production - for scale)",
+        "Let AI decide based on best practices",
+        "Custom (I'll specify)"
+      ],
+      "default": "Option 1",
+      "rationale": "Why this question matters for this specific project",
+      "impact": "What changes if they choose differently",
+      "custom_prompt": "What would you like to use instead?",
+      "validation": "What makes a valid custom answer"
+    }},
+    ...
+  ]
+  
+  IMPORTANT: Generate MORE questions for complex projects, FEWER for simple ones.
+  Complexity indicators:
+  - Multiple components (API + UI + ML + DB) → More questions
+  - Production deployment (Docker, K8s, monitoring) → More questions
+  - Multiple models or pipelines → More questions
+  - Simple CRUD or single-purpose app → Fewer questions
+  
+  Example comprehensive question with 7 options:
+  {{
+    "id": "Q-001",
+    "question": "For your RAG system, which embedding model should generate vector representations of documents?",
+    "category": "model",
+    "priority": "critical",
+    "options": [
+      "OpenAI text-embedding-ada-002 (best quality, $0.0001/1K tokens, requires API key)",
+      "sentence-transformers/all-MiniLM-L6-v2 (free, local, fast, 384 dims, good for most use cases)",
+      "sentence-transformers/all-mpnet-base-v2 (free, local, slower, 768 dims, better quality)",
+      "Cohere embed-english-v3.0 (high quality, paid API, good for production)",
+      "Google PaLM embeddings (Google Cloud, enterprise-grade)",
+      "Let AI decide based on your deployment environment",
+      "Custom (I'll specify my own model)"
+    ],
+    "default": "sentence-transformers/all-MiniLM-L6-v2",
+    "rationale": "Embedding model affects retrieval quality, speed, cost, and deployment complexity",
+    "impact": "OpenAI: best quality but costs $. Local models: free but need more RAM. Different dims affect vector DB config.",
+    "custom_prompt": "Which embedding model would you like to use? (Provide model name/API)",
+    "validation": "Must be a valid sentence-transformers model or API endpoint"
+  }}
+  
+  Example bad question (too few options, not specific):
+  "What kind of model do you want?" 
+  
+  Return ONLY the JSON array, no explanatory text.
+
+prioritize_questions: |
+  Intelligently prioritize these questions based on user context:
+  
+  Questions: {questions}
+  User Context: {user_context}
+  
+  Consider:
+  1. **Blocking Issues**: Questions that prevent any code generation if unanswered
+  2. **High Impact**: Answers that fundamentally change architecture
+  3. **User Expertise**: Don't ask basic questions to experts, don't ask advanced questions to beginners
+  4. **Project Phase**: Early prototyping needs fewer questions than production deployment
+  5. **Auto-decidable**: Can we make a reasonable decision without asking?
+  
+  Decision rules:
+  - If answer is obvious from context → SKIP (don't include)
+  - If answer doesn't significantly change code → SKIP
+  - If we can use industry best practice as default → Lower priority
+  - If user explicitly mentioned something → SKIP that question
+  
+  Return prioritized questions as JSON array (NO markdown):
+  [
+    {{
+      "id": "Q-001",
+      ... (same structure as input question) ...
+      "final_priority": "critical|high|medium|low",
+      "auto_decidable": false,
+      "recommended_default": "Value we'd use if user skips",
+      "justification": "Why this priority level?"
+    }},
+    ...
+  ]
+  
+  Order: critical first, then high, then medium. Omit low priority questions.
+  Return ONLY the JSON array.
+
+validate_answer: |
+  Validate if this answer makes sense in the context of the project:
+  
+  Question: {question}
+  User's Answer: {answer}
+  Project Specification: {specification}
+  
+  Check for:
+  1. **Consistency**: Does answer align with project goals?
+  2. **Feasibility**: Is this technically possible/practical?
+  3. **Compatibility**: Does it conflict with other requirements?
+  4. **Best Practices**: Is this a reasonable choice?
+  
+  Examples:
+  - Question: "GPU or CPU?"  Answer: "GPU"  Project: "Deploy on edge device"
+    → INVALID: GPU uncommon on edge devices, suggest CPU or optimization
+  
+  - Question: "Dataset size?"  Answer: "1 million images"  Project: "Quick prototype"
+    → WARNING: Large dataset for prototyping, suggest smaller subset first
+  
+  - Question: "Framework?"  Answer: "PyTorch"  Project: "Image classification"
+    → VALID: Excellent choice, PyTorch is popular for computer vision
+  
+  Return JSON (NO markdown):
+  {{
+    "valid": true|false,
+    "level": "valid|warning|error",
+    "message": "Explanation for user",
+    "suggestion": "Alternative recommendation if problematic",
+    "confidence": 0.95,
+    "auto_correct": "Suggested correction if we're very confident",
+    "ask_confirmation": "Do you mean X instead of Y?"
+  }}
+  
+  Be helpful, not restrictive. If answer is unconventional but valid, approve with a note.
+  Return ONLY valid JSON.
+
+analyze_requirements: |
+  You are an expert AI system designer analyzing user requirements.
+  
+  USER REQUEST:
+  {request}
+  
+  TASK:
+  Analyze the request and identify ALL ambiguities and missing information needed to generate production-quality code.
+  
+  Focus on:
+  1. Framework/Technology choices (PyTorch, TensorFlow, JAX, Scikit-learn, etc.)
+  2. Hardware requirements (CPU, GPU, TPU, memory, batch size)
+  3. Data handling (augmentation, validation, preprocessing, data format)
+  4. Model architecture (custom, pretrained, ensemble, specific architecture)
+  5. Deployment target (local, cloud, edge, API, containerization)
+  6. Testing requirements (coverage level, test types, CI/CD)
+  7. Documentation needs (basic, comprehensive, examples)
+  
+  For each ambiguity, provide:
+  - category: One of [framework, hardware, data, architecture, deployment, testing, documentation, other]
+  - severity: One of [BLOCKING, HIGH, MEDIUM, LOW]
+  - question: Clear question to ask user (concise, specific)
+  - default: Suggested default answer
+  
+  Return ONLY valid JSON (no markdown, no code blocks):
+  {{
+    "ambiguities": [
+      {{
+        "category": "framework",
+        "severity": "BLOCKING",
+        "question": "Which ML framework would you like to use?",
+        "default": "PyTorch"
+      }},
+      {{
+        "category": "hardware",
+        "severity": "HIGH",
+        "question": "Do you need GPU support?",
+        "default": "Optional"
+      }}
+    ]
+  }}
+  
+  Identify 3-8 ambiguities. Be specific and actionable.
+
+generate_custom_question: |
+  Given this ambiguity in the user's request:
+  
+  CATEGORY: {category}
+  CONTEXT: {context}
+  SEVERITY: {severity}
+  
+  Generate ONE clear, specific question to ask the user.
+  
+  Requirements:
+  - Question should be unambiguous and actionable
+  - Provide 3-5 answer options if applicable
+  - Suggest a sensible default answer
+  - Keep it concise (< 150 characters)
+  - Use friendly, professional tone
+  
+  Return ONLY valid JSON (no markdown):
+  {{
+    "question": "Your clear question here?",
+    "options": ["Option 1", "Option 2", "Option 3"],
+    "default": "Option 1"
+  }}
+
+parse_answer: |
+  Parse this user answer into structured data.
+  
+  QUESTION: {question_text}
+  CATEGORY: {category}
+  USER ANSWER: {answer_text}
+  
+  Available options: {options}
+  Expected type: {expected_type}
+  
+  Extract the relevant value and validate it against the options (if provided).
+  Determine confidence based on how well the answer matches expected format.
+  
+  Return ONLY valid JSON (no markdown):
+  {{
+    "parsed_value": "<extracted value>",
+    "confidence": 0.95,
+    "valid": true,
+    "error": null
+  }}
+  
+  Rules:
+  - confidence: 0.0-1.0 (1.0 = perfect match, 0.0 = unparseable)
+  - valid: true if confidence >= 0.7 and value is reasonable
+  - error: null if valid, otherwise brief error message
+  - parsed_value: normalized value (e.g., "PyTorch" -> "pytorch")

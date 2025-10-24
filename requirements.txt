@@ -1,0 +1,54 @@
+# Core Framework
+langchain>=0.1.0
+langgraph>=0.0.40
+langchain-core>=0.1.0
+
+# Google Gemini
+google-generativeai>=0.3.0
+langchain-google-genai>=0.0.5
+
+# Vector Stores & Embeddings
+chromadb>=0.4.0
+# Note: Using Gemini's text-embedding-004 API instead of sentence-transformers
+
+# Document Processing (NEW for Week 4 RAG)
+PyMuPDF>=1.23.0  # PDF parsing
+arxiv>=2.1.0  # arXiv paper download
+beautifulsoup4>=4.12.0  # HTML parsing
+lxml>=4.9.0  # XML parsing (dependency for BeautifulSoup)
+
+# Code Analysis
+astroid>=3.0.0
+tree-sitter>=0.20.0
+
+# Testing & Quality
+pytest>=7.4.0
+pytest-asyncio>=0.21.0
+black>=23.0.0
+ruff>=0.1.0
+
+# Data Handling
+pydantic>=2.0.0
+pyyaml>=6.0.0
+python-dotenv>=1.0.0
+
+# Database
+sqlalchemy>=2.0.0
+
+# UI
+streamlit>=1.28.0
+streamlit-lottie>=0.0.5  # Lottie animations for UI
+requests>=2.31.0  # For loading Lottie animations from URLs
+
+# CLI Framework
+typer>=0.9.0
+questionary>=2.0.0
+click>=8.1.0
+
+# Logging
+loguru>=0.7.0
+
+# Utilities
+tenacity>=8.2.0
+tqdm>=4.66.0
+rich>=13.7.0

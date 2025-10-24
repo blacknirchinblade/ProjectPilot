@@ -1,0 +1,564 @@
+# Review Agent Prompts
+
+readability_analysis: |
+  Analyze the readability of this Python code:
+  
+  Code Sample:
+  ```python
+  {code}
+  ```
+  
+  Automated Analysis Found:
+  {issues}
+  
+  Scores:
+  - Naming: {naming_score}/100
+  - Complexity: {complexity_score}/100
+  - Comments: {comment_score}/100
+  - Overall: {total_score}/100
+  
+  Provide a detailed readability assessment:
+  
+  1. **Readability Summary** (2-3 sentences):
+     - Overall impression
+     - Main strengths and weaknesses
+  
+  2. **Critical Issues** (top 3):
+     - What hurts readability most?
+     - Specific examples from code
+  
+  3. **Quick Wins** (easy improvements):
+     - Simple changes for immediate impact
+  
+  4. **Style Consistency**:
+     - Is naming consistent?
+     - Is formatting uniform?
+  
+  5. **Cognitive Load**:
+     - Is code easy to understand?
+     - Any confusing patterns?
+  
+  Be specific and actionable. Focus on readability, not functionality.
+
+logic_flow_analysis: |
+  Analyze the logic flow and control flow of this Python code:
+  
+  File: {filename}
+  Code Sample:
+  ```python
+  {code}
+  ```
+  
+  Automated Analysis Found:
+  {issues}
+  
+  Scores:
+  - Control Flow: {control_flow_score}/100
+  - Error Handling: {error_handling_score}/100
+  - Edge Cases: {edge_case_score}/100
+  - Overall Logic: {total_score}/100
+  
+  Provide a comprehensive logic flow assessment:
+  
+  1. **Logic Flow Summary** (2-3 sentences):
+     - Overall code logic quality
+     - Execution path clarity
+     - Main strengths and concerns
+  
+  2. **Critical Logic Issues** (top 3):
+     - Most problematic logic patterns
+     - Potential runtime failures
+     - Specific code examples
+  
+  3. **Control Flow Concerns**:
+     - Are branches well-structured?
+     - Any confusing flow patterns?
+     - Missing return paths or conditions?
+  
+  4. **Error Handling Assessment**:
+     - Are errors caught appropriately?
+     - Any silent failures?
+     - Resource cleanup issues?
+  
+  5. **Edge Cases & Robustness**:
+     - Handling of None/empty/zero values
+     - Boundary condition validation
+     - Type safety concerns
+  
+  6. **Recommendations** (prioritized):
+     - Most important fixes
+     - Logic simplification opportunities
+     - Safety improvements
+  
+  Focus on logical correctness, error handling, and robustness. Be specific with line references.
+
+connectivity_analysis: |
+  Analyze the code connectivity and dependencies in this Python file:
+  
+  File: {filename}
+  Code Sample:
+  ```python
+  {code}
+  ```
+  
+  Automated Analysis Found:
+  {issues}
+  
+  Scores:
+  - Dependencies: {dependency_score}/100
+  - Data Flow: {data_flow_score}/100
+  - Overall Connectivity: {total_score}/100
+  
+  Provide a comprehensive connectivity assessment:
+  
+  1. **Connectivity Summary** (2-3 sentences):
+     - Overall code organization
+     - Dependency structure quality
+     - Main strengths and concerns
+  
+  2. **Critical Connectivity Issues** (top 3):
+     - Most problematic patterns
+     - Circular dependencies or tight coupling
+     - Specific code examples
+  
+  3. **Dependency Structure**:
+     - Are functions well-organized?
+     - Any unnecessary dependencies?
+     - Missing abstractions?
+  
+  4. **Data Flow Assessment**:
+     - Clear data pathways?
+     - Global state issues?
+     - Variable usage patterns?
+  
+  5. **API Consistency**:
+     - Consistent function signatures?
+     - Naming conventions followed?
+     - Type safety considerations?
+  
+  6. **Recommendations** (prioritized):
+     - Most important refactoring
+     - Decoupling opportunities
+     - Organization improvements
+  
+  Focus on code organization, dependencies, and maintainability.
+
+review_code: |
+  Review the following code thoroughly:
+  
+  Code:
+  ```python
+  {code}
+  ```
+  
+  Context: {context}
+  {focus_areas}
+  
+  Provide a comprehensive code review with:
+  
+  1. Overall Quality Score: X/100
+  
+  2. Issues Found:
+     - List specific problems, bugs, or concerns
+     - Prioritize by severity (Critical, Major, Minor)
+  
+  3. Suggestions for Improvement:
+     - Concrete recommendations
+     - Best practices to apply
+     - Refactoring opportunities
+  
+  4. Positive Aspects:
+     - What's done well
+     - Good patterns used
+  
+  Be specific and actionable in your feedback.
+
+analyze_quality: |
+  Analyze the quality of this code using the following metrics:
+  
+  Code:
+  ```python
+  {code}
+  ```
+  
+  Evaluate these quality metrics (score each 0-100):
+  {metrics}
+  
+  For each metric, provide:
+  - Score: X/100
+  - Explanation: Why this score?
+  - Specific examples from the code
+  
+  Then provide:
+  - Overall Quality Score: (average of all metrics)
+  - Strengths: What's done well
+  - Weaknesses: Areas needing improvement
+  - Priority actions: Top 3 improvements needed
+
+check_security: |
+  Perform a security analysis of this code:
+  
+  Code:
+  ```python
+  {code}
+  ```
+  
+  Check for these security concerns:
+  1. Input Validation
+     - Unvalidated user inputs
+     - SQL injection vulnerabilities
+     - Command injection risks
+  
+  2. Authentication & Authorization
+     - Weak authentication
+     - Missing authorization checks
+     - Insecure credential storage
+  
+  3. Data Protection
+     - Sensitive data exposure
+     - Weak encryption
+     - Insecure data transmission
+  
+  4. Error Handling
+     - Information leakage in errors
+     - Unhandled exceptions
+     - Security-relevant logging issues
+  
+  5. Dependencies & Imports
+     - Unsafe library usage
+     - Deprecated security features
+     - Known vulnerable packages
+  
+  Provide:
+  - Risk Level: LOW / MEDIUM / HIGH / CRITICAL
+  - Vulnerabilities Found: List specific issues
+  - Recommendations: How to fix each issue
+  - Best Practices: Security improvements to implement
+
+check_performance: |
+  Analyze the performance characteristics of this code:
+  
+  Code:
+  ```python
+  {code}
+  ```
+  
+  Evaluate:
+  1. Time Complexity
+     - Algorithm efficiency (Big O notation)
+     - Nested loops or recursion concerns
+     - Unnecessary operations
+  
+  2. Space Complexity
+     - Memory usage
+     - Data structure choices
+     - Memory leaks or excessive allocation
+  
+  3. Performance Bottlenecks
+     - Slow operations (I/O, network, DB)
+     - Redundant computations
+     - Inefficient data access patterns
+  
+  4. Optimization Opportunities
+     - Caching possibilities
+     - Vectorization (NumPy/Pandas)
+     - Parallel processing potential
+     - Better algorithms or data structures
+  
+  Provide:
+  - Bottlenecks: Specific performance issues found
+  - Complexity Analysis: Time and space complexity
+  - Optimizations: Concrete suggestions with examples
+  - Priority: Which optimizations matter most
+
+check_best_practices: |
+  Check this {language} code against best practices and style guidelines:
+  
+  Code:
+  ```python
+  {code}
+  ```
+  
+  Evaluate:
+  1. PEP 8 / Style Guide Compliance
+     - Naming conventions
+     - Indentation and formatting
+     - Line length and whitespace
+  
+  2. Code Organization
+     - Function/class structure
+     - Module organization
+     - Import ordering
+  
+  3. Documentation
+     - Docstrings (completeness, format)
+     - Comments (clarity, necessity)
+     - Type hints
+  
+  4. Python Best Practices
+     - Pythonic idioms
+     - Context managers usage
+     - Exception handling patterns
+     - Iterator/generator usage
+  
+  5. Design Patterns
+     - Appropriate pattern usage
+     - SOLID principles
+     - DRY (Don't Repeat Yourself)
+  
+  Provide:
+  - Style Score: X/100
+  - Violations: List specific issues with line references
+  - Recommendations: How to fix each violation
+  - Examples: Show corrected code snippets
+
+generate_review_report: |
+  Generate a comprehensive code review report:
+  
+  Code:
+  ```python
+  {code}
+  ```
+  
+  {include_suggestions}
+  
+  Create a detailed report with these sections:
+  
+  ## EXECUTIVE SUMMARY
+  - Overall Quality Score: X/100
+  - Brief assessment (2-3 sentences)
+  - Key findings summary
+  
+  ## DETAILED ANALYSIS
+  
+  ### 1. Code Quality (Score: X/100)
+  - Readability
+  - Maintainability
+  - Complexity
+  - Documentation
+  
+  ### 2. Correctness (Score: X/100)
+  - Logic errors
+  - Edge cases
+  - Error handling
+  - Type safety
+  
+  ### 3. Performance (Score: X/100)
+  - Time complexity
+  - Space complexity
+  - Optimization opportunities
+  
+  ### 4. Security (Score: X/100)
+  - Vulnerabilities found
+  - Security best practices
+  - Risk assessment
+  
+  ### 5. Best Practices (Score: X/100)
+  - Style compliance
+  - Design patterns
+  - Python idioms
+  
+  ## CRITICAL ISSUES
+  List any critical problems that MUST be fixed
+  
+  ## RECOMMENDATIONS
+  Prioritized list of improvements
+  
+  ## CONCLUSION
+  Final verdict and next steps
+
+code_review: |
+  Review the following code thoroughly:
+  
+  File: {file_path}
+  Code:
+  ```python
+  {code}
+  ```
+  
+  Provide a comprehensive review covering:
+  
+  1. READABILITY (Score: 0-10)
+     - Variable naming
+     - Code organization
+     - Comments and docstrings
+     - Formatting consistency
+  
+  2. CODE QUALITY (Score: 0-10)
+     - PEP 8 compliance
+     - Type hints usage
+     - Error handling
+     - Code smells
+  
+  3. LOGIC & CORRECTNESS (Score: 0-10)
+     - Algorithm correctness
+     - Edge cases
+     - Logical errors
+     - Data validation
+  
+  4. CONNECTIVITY (Score: 0-10)
+     - Import structure
+     - API design
+     - Module coupling
+     - Interface clarity
+  
+  5. MAINTAINABILITY (Score: 0-10)
+     - Code structure
+     - Configurability
+     - Documentation
+     - Testability
+  
+  Overall Score: (average)
+  
+  ISSUES FOUND:
+  - [CRITICAL] High priority issues that must be fixed
+  - [MAJOR] Important issues that should be fixed
+  - [MINOR] Nice-to-have improvements
+  
+  RECOMMENDATIONS:
+  Specific suggestions for improvement with examples.
+  
+  REFACTOR NEEDED: Yes/No (if overall score < 7)
+
+connectivity_review: |
+  Review the connectivity and integration of these modules:
+  
+  Files: {file_list}
+  
+  Analyze:
+  1. Import Dependencies
+     - Are imports necessary?
+     - Any circular imports?
+     - Missing imports?
+  
+  2. API Consistency
+     - Consistent naming conventions?
+     - Similar functions follow same patterns?
+     - Return types consistent?
+  
+  3. Data Flow
+     - Clear data transformations?
+     - Type compatibility between modules?
+     - Error propagation handled?
+  
+  4. Integration Issues
+     - Tight coupling problems?
+     - Missing interfaces?
+     - Inconsistent error handling?
+  
+  Provide specific recommendations for improving connectivity.
+
+architecture_review: |
+  Review the overall project architecture:
+  
+  Project Structure:
+  {project_structure}
+  
+  Components:
+  {components}
+  
+  Evaluate:
+  1. Separation of Concerns
+  2. Modularity
+  3. Scalability
+  4. Testability
+  5. Maintainability
+  
+  Score each aspect (0-10) and provide:
+  - Strengths
+  - Weaknesses
+  - Recommended improvements
+  - Refactoring priorities
+
+logic_flow_review: |
+  Review the logic flow in this code:
+  
+  Function/Class: {name}
+  Code:
+  ```python
+  {code}
+  ```
+  
+  Check:
+  1. Control Flow
+     - Is the logic easy to follow?
+     - Are there unnecessary branches?
+     - Can it be simplified?
+  
+  2. Edge Cases
+     - What edge cases are handled?
+     - What edge cases are missing?
+     - Are error conditions covered?
+  
+  3. Performance
+     - Any obvious inefficiencies?
+     - Unnecessary computations?
+     - Can it be optimized?
+  
+  4. Correctness
+     - Does it achieve the intended purpose?
+     - Are there logical errors?
+     - Are assumptions valid?
+  
+  Provide detailed feedback with suggestions.
+
+project_connectivity_analysis: |
+  Analyze the cross-file connectivity and architecture of this Python project:
+  
+  Files analyzed: {files}
+  
+  Issues detected:
+  {issues}
+  
+  Metrics:
+  - Import Dependencies Score: {import_score}/100
+  - Module Coupling Score: {coupling_score}/100
+  - Overall Project Score: {total_score}/100
+  
+  Provide a comprehensive project architecture analysis in the following format:
+  
+  ## Project Architecture Summary
+  (2-3 sentences on overall project structure and connectivity health)
+  
+  ## Critical Architecture Issues
+  List the top 3 most important problems:
+  1. [Most critical issue]
+  2. [Second most critical]
+  3. [Third priority]
+  
+  ## Import Structure Analysis
+  - **Dependency Graph**: Describe the import dependency structure
+  - **Circular Imports**: Explain any circular import issues and their impact
+  - **Import Depth**: Comment on the depth of import chains
+  - **External Dependencies**: Note any concerning patterns
+  
+  ## Module Coupling Assessment
+  - **Coupling Levels**: Assess afferent (fan-in) and efferent (fan-out) coupling
+  - **Bidirectional Dependencies**: Highlight modules with mutual dependencies
+  - **Instability**: Comment on module stability and change resistance
+  - **Cohesion**: Evaluate module cohesion and single responsibility
+  
+  ## API Contract Consistency
+  - **Signature Consistency**: Check for same-named functions with different signatures
+  - **Naming Patterns**: Evaluate consistency of naming conventions across modules
+  - **Interface Contracts**: Assess explicit vs implicit contracts
+  - **Type Safety**: Comment on type hint usage across the project
+  
+  ## Package Organization
+  - **Structure Quality**: Evaluate directory and package organization
+  - **Module Placement**: Comment on whether modules are logically grouped
+  - **Depth Analysis**: Assess package nesting depth
+  - **Namespace Management**: Evaluate __init__.py usage and exports
+  
+  ## Architectural Recommendations
+  Provide 5-7 prioritized recommendations for improving project architecture:
+  1. [Highest priority recommendation with specific actions]
+  2. [Next priority]
+  ...
+  
+  Focus on:
+  - Breaking circular dependencies through dependency injection or facades
+  - Reducing coupling through interfaces and abstraction layers
+  - Improving API consistency across modules
+  - Better package organization and module boundaries
+  - Establishing clear architectural layers (e.g., domain, application, infrastructure)

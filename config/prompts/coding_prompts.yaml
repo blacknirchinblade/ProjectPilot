@@ -1,0 +1,221 @@
+# Coding Agent Prompts
+
+# Coding Agent Prompts (Refactored for Iteration)
+
+generate_module: |
+  Generate a COMPLETE, PRODUCTION-READY Python module for the following specification:
+  
+  Module Name: {module_name}
+  Purpose: {purpose}
+  Requirements: {requirements}
+  
+  CRITICAL REQUIREMENTS:
+  - SYNTAX: Every line must be syntactically complete and valid
+  - COMPLETENESS: NO incomplete statements, NO truncated lines
+  - VALIDATION: Code must compile without SyntaxError
+  - MARKER: End with '# CODE_GENERATION_COMPLETE' marker
+  
+  ⚠️ COMMON MISTAKES TO AVOID (Week 2 Enhanced):
+  
+  ❌ WRONG - Incomplete method call:
+       result = some_object.
+  ✅ RIGHT:
+       result = some_object.method_name()
+  
+  ❌ WRONG - Incomplete assignment:
+       value =
+  ✅ RIGHT:
+       value = computed_result
+  
+  ❌ WRONG - Trailing comma before close:
+       items = [1, 2, 3,]
+       func(a, b,)
+  ✅ RIGHT:
+       items = [1, 2, 3]
+       func(a, b)
+  
+  ❌ WRONG - Unclosed parenthesis:
+       fig, ax = plt.subplots(figsize=(8, 6
+  ✅ RIGHT:
+       fig, ax = plt.subplots(figsize=(8, 6))
+  
+  ❌ WRONG - Unterminated string:
+       path = "output/file.png
+  ✅ RIGHT:
+       path = "output/file.png"
+  
+  STRING COMPLETION RULES:
+  • EVERY opening quote (" or ' or """) MUST have closing quote
+  • Check all f-strings: f"text {{{{var}}}}" (complete) vs f"text {{{{var" (incomplete - missing braces and quote)
+  • Check all paths: "path/file.txt" (complete) vs "path/file.txt (incomplete - missing closing quote)
+  • Triple quotes: """docstring""" (complete) vs """docstring (incomplete - missing closing quotes)
+  
+  The module should include:
+  - Complete implementation with type hints
+  - Comprehensive docstrings (Google style) without examples
+  - Error handling and input validation
+  - Logging where appropriate (use loguru, not print)
+  - Example usage in docstring
+  - All imports organized (stdlib, third-party, local)
+  
+  QUALITY CHECKLIST (verify before returning):
+  ☑ All statements complete (no lines ending with . = , ( [ etc.)
+  ☑ All strings have opening AND closing quotes
+  ☑ All parentheses/brackets are paired: () [] {{{{}}}}
+  ☑ All functions have return types
+  ☑ All exceptions are handled
+  ☑ Code compiles without SyntaxError
+  ☑ Marker '# CODE_GENERATION_COMPLETE' at end
+  
+  Make it production-ready and follow PEP 8.
+
+# --- NEW PROMPT FOR PLAN-DRIVEN GENERATION ---
+generate_from_spec: |
+  You are an expert Python developer. Your task is to generate the complete, production-ready code for a single Python file based on a detailed specification.
+
+  **PROJECT CONTEXT:**
+  - Project Name: {project_name}
+  - Project Type: {project_type}
+  - Core Technologies: {technologies}
+
+  **FILE SPECIFICATION:**
+  - File Path: {file_path}
+  - Purpose: {purpose}
+  
+  **COMPONENTS TO IMPLEMENT:**
+  {components}
+
+  **IMPORTS:**
+  You MUST use these EXACT import statements. Do NOT add or remove any.
+  ```python
+    {imports}
+    {feedback}
+    CRITICAL REQUIREMENTS:
+    1. Generate ONLY the code for {file_path}. Do NOT include code for other files.
+    2. Generate COMPLETE, PRODUCTION-READY code.
+    3. Include Minimal definition for classes and functions 
+    4. Correct imports: Use ONLY the imports provided in IMPORTS blocking
+    5. Complete Code: Ensure all code is syntactically complete with no truncated lines, Unclosed strings, or Missing parentheses.
+    6.Marker: You MUST end the entire response with the marker '# CODE_GENERATION_COMPLETE'
+
+    Generate ONLY the Python code for the specified file.
+
+
+generate_class: |
+  Create a COMPLETE Python class with the following specification:
+  
+  Class Name: {class_name}
+  Purpose: {purpose}
+  Attributes: {attributes}
+  Methods: {methods}
+  
+  CRITICAL: Generate COMPLETE code only. Every line must be syntactically valid.
+  
+  ⚠️ AVOID INCOMPLETE CODE:
+  ❌ result = obj.     ✅ result = obj.method()
+  ❌ value =           ✅ value = 42
+  ❌ items = [1, 2,]   ✅ items = [1, 2]
+  ❌ "text             ✅ "text"
+  
+  Requirements:
+  - Use type hints for all methods
+  - Add docstrings for class and all methods (Google style)
+  - Implement __init__, __str__, __repr__ if appropriate
+  - Add property decorators where needed
+  - Include input validation
+  - Add logging for important operations (use loguru)
+  - End with '# CODE_GENERATION_COMPLETE' marker
+  
+  Provide complete, working implementation with no incomplete statements.
+
+generate_function: |
+  Write a COMPLETE Python function for:
+  
+  Function Name: {function_name}
+  Purpose: {purpose}
+  Parameters: {parameters}
+  Return Type: {return_type}
+  
+  CRITICAL: All code must be syntactically complete. NO truncated lines.
+  
+  ⚠️ CHECK: All strings closed, all parens paired, no trailing operators
+  
+  Requirements:
+  - Type hints for all parameters and return
+  - Comprehensive docstring with examples
+  - Input validation
+  - Error handling with specific exceptions
+  - Edge case handling
+  - End with '# CODE_GENERATION_COMPLETE' marker
+  
+  Include usage examples in the docstring.
+
+create_ml_pipeline: |
+  Create a COMPLETE ML pipeline for:
+  
+  Task: {task_type}  # e.g., classification, regression, clustering
+  Dataset: {dataset_info}
+  Model: {model_type}
+  
+  CRITICAL: Generate COMPLETE, RUNNABLE code. NO incomplete statements.
+  End with '# CODE_GENERATION_COMPLETE' marker.
+  
+  Include:
+  1. Data loading and validation
+  2. Preprocessing and feature engineering
+  3. Train/validation/test split
+  4. Model definition
+  5. Training loop with logging (use loguru)
+  6. Evaluation metrics
+  7. Model saving/loading
+  8. Inference function
+  9. Hyperparameter tuning (if applicable)
+  10. Visualization of results (if applicable)
+
+  
+  Make it modular and production-ready with proper error handling.
+
+create_data_loader: |
+  Create a COMPLETE data loader for:
+  
+  Data Type: {data_type}  # tabular, image, text, time_series
+  Data Source: {data_source}
+  Format: {format}
+  
+  CRITICAL: All code must be syntactically complete.
+  End with '# CODE_GENERATION_COMPLETE' marker.
+  
+  Include:
+  - Data validation
+  - Preprocessing pipeline
+  - Augmentation (if applicable)
+  - Batch generation
+  - Error handling for corrupt data
+  - GPU support
+  - Multithreading
+  - Parallelization
+  - EDA for exploratory analysis
+  - Memory-efficient loading for large datasets
+
+
+  
+  Use PyTorch or TensorFlow dataset API with complete implementation.
+
+generate_config_manager: |
+  Create a COMPLETE configuration management system for:
+  
+  Project: {project_name}
+  Config Parameters: {parameters}
+  
+  CRITICAL: Generate COMPLETE, WORKING code.
+  End with '# CODE_GENERATION_COMPLETE' marker.
+  
+  Include:
+  - YAML/JSON config file structure
+  - Config loading and validation
+  - Default values
+  - Type checking
+  - Environment variable override
+  - Config update methods
+  
+  Use Pydantic for validation with full implementation.

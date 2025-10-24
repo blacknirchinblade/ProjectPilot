@@ -1,0 +1,243 @@
+# Refactoring Agent Prompts
+
+refactor_code: |
+  Refactor the following code based on review feedback:
+  
+  Original Code:
+  ```python
+  {code}
+  ```
+  
+  Review Feedback:
+  {review_feedback}
+  {focus_areas}
+  
+  Please refactor the code to address all feedback. Provide:
+  
+  1. **Refactored Code** - Complete, production-ready code
+  2. **Changes Made** - List all modifications
+  3. **Improvement Summary** - How the code is better now
+  
+  Ensure the refactored code:
+  - Maintains original functionality
+  - Improves code quality based on feedback
+  - Follows Python best practices (PEP 8)
+  - Has proper type hints and docstrings
+  - Is more maintainable and readable
+  
+  Focus on addressing the specific feedback while improving overall code quality.
+
+improve_structure: |
+  Improve the structure and organization of this code:
+  
+  Code:
+  ```python
+  {code}
+  ```
+  
+  Structural Issues to Address:
+  {issues}
+  
+  Restructure the code to:
+  1. Better organize functions and classes
+  2. Improve separation of concerns
+  3. Reduce coupling between components
+  4. Enhance modularity
+  5. Apply SOLID principles where appropriate
+  
+  Provide:
+  - Restructured code with clear organization
+  - Explanation of structural changes
+  - Benefits of the new structure
+  
+  Ensure the code maintains all functionality while improving structure.
+
+optimize_performance: |
+  Optimize this code for better performance:
+  
+  Code:
+  ```python
+  {code}
+  ```
+  
+  Known Performance Issues:
+  {bottlenecks}
+  
+  Optimize the code by:
+  1. Reducing time complexity where possible
+  2. Minimizing space complexity
+  3. Using more efficient algorithms or data structures
+  4. Leveraging Python's built-in optimizations
+  5. Applying vectorization (NumPy/Pandas) if applicable
+  6. Removing redundant operations
+  
+  Provide:
+  - Optimized code with performance improvements
+  - Complexity analysis (before and after)
+  - Performance improvements achieved (e.g., "10x faster", "O(n²) to O(n)")
+  - Explanation of optimization techniques used
+  
+  Maintain code readability while optimizing.
+
+apply_design_pattern: |
+  Apply the {pattern} design pattern to this code:
+  
+  Code:
+  ```python
+  {code}
+  ```
+  
+  Context:
+  {context}
+  
+  Refactor the code to properly implement the {pattern} pattern. Provide:
+  
+  1. **Refactored Code** - Code using the {pattern} pattern
+  2. **Pattern Explanation** - How the pattern is applied
+  3. **Benefits** - Advantages of using this pattern here:
+     - Improved flexibility
+     - Better maintainability
+     - Enhanced extensibility
+     - Clearer design
+  
+  Ensure:
+  - Pattern is correctly implemented
+  - Code is more flexible and maintainable
+  - Original functionality is preserved
+  - Pattern fits the use case appropriately
+  
+  Include clear comments explaining the pattern structure.
+
+simplify_logic: |
+  Simplify the complex logic in this code:
+  
+  Code:
+  ```python
+  {code}
+  ```
+  
+  Complex Areas:
+  {complex_areas}
+  
+  Simplify by:
+  1. Reducing nested conditionals
+  2. Breaking down complex functions into smaller ones
+  3. Using early returns to reduce nesting
+  4. Replacing complex conditions with descriptive helper functions
+  5. Applying DRY (Don't Repeat Yourself) principle
+  6. Using Python's built-in functions and comprehensions
+  
+  Provide:
+  - Simplified code with reduced complexity
+  - Cyclomatic complexity reduction (if measurable)
+  - List of simplification techniques applied
+  - Explanation of how logic is clearer now
+  
+  The simplified code should be:
+  - Easier to understand
+  - Easier to test
+  - Less error-prone
+  - More maintainable
+
+enhance_readability: |
+  Enhance the readability and style of this code:
+  
+  Code:
+  ```python
+  {code}
+  ```
+  
+  Style Issues:
+  {style_issues}
+  
+  Improve readability by:
+  1. Using descriptive variable and function names
+  2. Adding clear comments for complex logic
+  3. Improving docstrings (Google/NumPy style)
+  4. Proper code formatting (PEP 8)
+  5. Breaking long lines and complex expressions
+  6. Adding whitespace for clarity
+  7. Using type hints consistently
+  8. Organizing imports properly
+  
+  Provide:
+  - Enhanced code with improved readability
+  - Readability score (0-100)
+  - List of enhancements made
+  - Before/after comparison of key improvements
+  
+  The enhanced code should be:
+  - Self-documenting where possible
+  - Easy to read and understand
+  - Following Python conventions
+  - Professional and production-ready
+
+refactor_for_testability: |
+  Refactor this code to improve testability:
+  
+  Code:
+  ```python
+  {code}
+  ```
+  
+  Make the code more testable by:
+  1. Separating concerns (logic, I/O, external dependencies)
+  2. Using dependency injection
+  3. Making functions pure where possible
+  4. Reducing side effects
+  5. Adding clear interfaces
+  6. Breaking down large functions
+  
+  Provide:
+  - Refactored code that's easier to test
+  - Explanation of testability improvements
+  - Example test cases that are now easier to write
+  - Mock points for external dependencies
+
+extract_method: |
+  Extract methods from this code to improve modularity:
+  
+  Code:
+  ```python
+  {code}
+  ```
+  
+  Areas for Method Extraction:
+  {areas}
+  
+  Extract cohesive code blocks into separate methods:
+  1. Identify code blocks with single responsibilities
+  2. Extract them into well-named methods
+  3. Ensure proper parameter passing
+  4. Add appropriate docstrings
+  5. Maintain original behavior
+  
+  Provide:
+  - Refactored code with extracted methods
+  - List of new methods created
+  - Explanation of each extraction
+  - Benefits of the extraction
+
+remove_code_smells: |
+  Remove code smells from this code:
+  
+  Code:
+  ```python
+  {code}
+  ```
+  
+  Common code smells to address:
+  1. Long methods/functions
+  2. Large classes
+  3. Duplicate code
+  4. Dead code
+  5. Magic numbers/strings
+  6. Improper naming
+  7. Too many parameters
+  8. Feature envy
+  
+  Provide:
+  - Clean code with smells removed
+  - List of smells found and fixed
+  - Explanation of refactoring techniques used
+  - Quality improvement achieved

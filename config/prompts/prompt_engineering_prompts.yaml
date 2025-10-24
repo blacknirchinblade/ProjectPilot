@@ -1,0 +1,239 @@
+# Prompt Engineering Agent Prompts
+# These prompts help enhance vague user inputs into detailed specifications
+
+analyze_user_input: |
+  Analyze the following user input to understand their requirements:
+  
+  User Input: {user_input}
+  Context: {context}
+  
+  Provide a detailed analysis in JSON format with:
+  {{
+    "task_type": "classification|regression|generation|clustering|detection|other",
+    "domain": "computer_vision|nlp|tabular_data|time_series|audio|other",
+    "ml_framework_preference": "pytorch|tensorflow|sklearn|jax|none_detected",
+    "deployment_target": "cloud|edge|research|production|unknown",
+    "complexity": "simple|moderate|complex",
+    "detected_keywords": ["list", "of", "key", "terms"],
+    "inferred_intent": "What does the user want to accomplish?",
+    "data_type": "images|text|structured|unstructured|mixed",
+    "estimated_scope": "small|medium|large"
+  }}
+  
+  Be specific and actionable. If uncertain, indicate "unknown" but provide your best guess.
+  Return ONLY valid JSON, no markdown formatting.
+
+extract_requirements: |
+  Extract detailed requirements from this user input and analysis:
+  
+  User Input: {user_input}
+  Analysis: {analysis}
+  
+  Generate a comprehensive requirements list in JSON format:
+  [
+    {{
+      "id": "REQ-001",
+      "category": "functional|non_functional|technical|data|performance",
+      "description": "Clear, specific requirement statement",
+      "priority": "must|should|could|wont",
+      "measurable": true|false,
+      "acceptance_criteria": "How to verify this requirement is met"
+    }},
+    ...
+  ]
+  
+  Requirements should be:
+  - SMART (Specific, Measurable, Achievable, Relevant, Time-bound)
+  - Covering: data, model, training, evaluation, deployment
+  - Prioritized (must-have vs nice-to-have)
+  
+  Generate at least 5 requirements, covering all aspects of an ML project.
+  Return ONLY valid JSON array, no markdown formatting.
+
+detect_ambiguities: |
+  Analyze these requirements to detect ambiguities, gaps, and unclear specifications:
+  
+  Requirements: {requirements}
+  
+  Identify issues in JSON format:
+  [
+    {{
+      "id": "AMB-001",
+      "category": "missing_info|vague_requirement|conflicting|assumption",
+      "description": "Clear description of the ambiguity or gap",
+      "affected_requirements": ["REQ-001", "REQ-002"],
+      "impact": "high|medium|low",
+      "suggestions": [
+        "Specific suggestion 1 with clear options",
+        "Specific suggestion 2 with clear options"
+      ],
+      "clarifying_questions": [
+        "Question to resolve this ambiguity?"
+      ]
+    }},
+    ...
+  ]
+  
+  Look for:
+  - Missing information (dataset size, model type, metrics, etc.)
+  - Vague requirements ("good accuracy" vs "95% accuracy")
+  - Conflicting requirements
+  - Unstated assumptions
+  - Performance/resource constraints not specified
+  
+  If no ambiguities found, return empty array [].
+  Return ONLY valid JSON array, no markdown formatting.
+
+build_technical_specs: |
+  Build detailed technical specifications from these requirements:
+  
+  Requirements: {requirements}
+  Analysis: {analysis}
+  
+  Generate comprehensive technical specs in JSON format:
+  {{
+    "data": {{
+      "source": "Specific dataset (MNIST, ImageNet, custom, etc.)",
+      "format": "Data format (images, CSV, JSON, etc.)",
+      "size": {{
+        "train": "Training set size",
+        "validation": "Validation set size",
+        "test": "Test set size"
+      }},
+      "preprocessing": ["List of preprocessing steps"],
+      "augmentation": ["Data augmentation techniques"],
+      "storage": "Where/how data is stored"
+    }},
+    "model": {{
+      "type": "Specific model architecture (CNN, Transformer, etc.)",
+      "framework": "PyTorch|TensorFlow|JAX|Sklearn",
+      "architecture_details": {{
+        "layers": ["Layer types and configurations"],
+        "parameters": "Estimated parameter count",
+        "input_shape": "Input dimensions",
+        "output_shape": "Output dimensions"
+      }},
+      "pretrained": "Use pretrained model? Which one?"
+    }},
+    "training": {{
+      "optimizer": "Adam|SGD|AdamW|etc.",
+      "loss_function": "CrossEntropy|MSE|etc.",
+      "learning_rate": "Specific value or range",
+      "batch_size": "Specific value or range",
+      "epochs": "Number of training epochs",
+      "early_stopping": true|false,
+      "checkpointing": "How often to save checkpoints",
+      "hardware": "CPU|GPU|TPU|Multi-GPU"
+    }},
+    "evaluation": {{
+      "metrics": ["Accuracy", "Precision", "Recall", "F1", "etc."],
+      "validation_strategy": "holdout|k-fold|stratified",
+      "success_criteria": "What metrics must be achieved?",
+      "visualization": ["Confusion matrix", "Learning curves", "etc."]
+    }},
+    "deployment": {{
+      "format": "ONNX|TorchScript|SavedModel|Pickle",
+      "api": "REST|gRPC|CLI|None",
+      "containerization": "Docker|Kubernetes|None",
+      "monitoring": "Logging|Metrics|Alerts",
+      "scalability": "Single instance|Load balanced|Auto-scaling"
+    }}
+  }}
+  
+  Be specific and realistic. Include industry best practices.
+  Return ONLY valid JSON, no markdown formatting.
+
+suggest_architecture: |
+  Based on these technical specifications, suggest an optimal project architecture:
+  
+  Technical Specs: {technical_specs}
+  
+  Provide architecture recommendation in JSON format:
+  {{
+    "recommended_structure": "monolithic|modular|microservices",
+    "estimated_files": 8,
+    "estimated_lines_of_code": 1500,
+    "suggested_modules": [
+      {{
+        "name": "data",
+        "purpose": "Data loading, preprocessing, augmentation",
+        "estimated_files": 3,
+        "key_classes": ["Dataset", "DataLoader", "Preprocessor"]
+      }},
+      {{
+        "name": "models",
+        "purpose": "Model architecture definitions",
+        "estimated_files": 2,
+        "key_classes": ["ModelName", "CustomLayers"]
+      }},
+      {{
+        "name": "training",
+        "purpose": "Training loop, optimization, checkpointing",
+        "estimated_files": 2,
+        "key_classes": ["Trainer", "EarlyStopping"]
+      }},
+      {{
+        "name": "evaluation",
+        "purpose": "Metrics, visualization, reporting",
+        "estimated_files": 2,
+        "key_classes": ["Evaluator", "MetricsCalculator"]
+      }},
+      {{
+        "name": "utils",
+        "purpose": "Helper functions, config management",
+        "estimated_files": 2,
+        "key_classes": ["Config", "Logger"]
+      }}
+    ],
+    "config_files": [
+      {{
+        "name": "config.yaml",
+        "purpose": "Hyperparameters and settings"
+      }},
+      {{
+        "name": "requirements.txt",
+        "purpose": "Python dependencies"
+      }}
+    ],
+    "justification": "Detailed explanation of why this structure is optimal for this project",
+    "alternatives": [
+      {{
+        "structure": "Alternative structure name",
+        "pros": ["Advantage 1", "Advantage 2"],
+        "cons": ["Disadvantage 1", "Disadvantage 2"]
+      }}
+    ],
+    "scalability_considerations": "How will this scale?",
+    "maintainability_score": 8.5
+  }}
+  
+  Consider:
+  - Project complexity and scope
+  - Team size and expertise
+  - Maintainability and testability
+  - Industry best practices
+  - Balance between over-engineering and under-engineering
+  
+  Return ONLY valid JSON, no markdown formatting.
+
+generate_enhanced_prompt: |
+  Transform this specification into a rich, detailed prompt for code generation agents:
+  
+  Specification: {specification}
+  
+  Create a comprehensive prompt that includes:
+  
+  1. **Project Overview**: Clear summary of what needs to be built
+  2. **Technical Requirements**: Specific technologies, frameworks, versions
+  3. **Architecture**: Recommended file structure and module organization
+  4. **Implementation Details**: Key algorithms, design patterns, best practices
+  5. **Quality Standards**: Code quality, testing, documentation requirements
+  6. **Success Criteria**: How to validate the implementation is complete
+  
+  The prompt should be:
+  - Detailed enough to generate production-quality code
+  - Clear and unambiguous
+  - Include specific examples where helpful
+  - Reference industry standards and best practices
+  
+  Format the prompt as a structured document that coding agents can follow step-by-step.
